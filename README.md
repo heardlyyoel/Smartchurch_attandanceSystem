@@ -53,22 +53,14 @@ Panduan ini ditujukan bagi *developer* yang ingin menjalankan sistem SmartChurch
    python -m venv venv
    source venv/Scripts/activate  # Untuk Windows
 3. Setelah dipastikan masuk ke dalam venv, jalankan perintah ini untuk menginstal seluruh daftar library yang dibutuhkan ke dalam venv tersebut:
-
-Bash
-pip install -r requirements.txt
-Siapkan konfigurasi rahasia sistem (Environment Variables):
-
+   ```bash
+   pip install -r requirements.txt
+4. Siapkan konfigurasi rahasia sistem (Environment Variables):
 Duplikasi (Copy-Paste) file .env.example dan ubah nama salinannya menjadi .env.
-
 Buka file .env tersebut dan isi bagian DB_PASSWORD dengan password PostgreSQL yang ada di komputermu sendiri.
-
-Jalankan server backend:
-
-Bash
-python manage.py runserver
-(Jika sukses, server akan berjalan dan bisa diakses di http://127.0.0.1:8000)
-
-
-***
-
-Udah aman ya sekarang, semuanya udah nyambung jadi satu! Silakan langsung di-*copy-paste* dan la
+5. Jalankan server backend:
+   ```bash
+   python manage.py runserver
+5. Jalankan server frontend:
+   ```bash
+   npm run dev
