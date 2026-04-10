@@ -45,8 +45,7 @@ Panduan ini ditujukan bagi *developer* yang ingin menjalankan sistem SmartChurch
 
 ### 1. Persiapan Database (PostgreSQL)
 1. Buat database baru kosong di pgAdmin (contoh nama: `smartchurch_db`).
-2. Lakukan **Restore** menggunakan file `smartchurch_DB.sql` (Hubungi *Lead Engineer* untuk mendapatkan file dump terbaru).
-
+2. Lakukan **Restore** menggunakan file `smartchurch_DB.sql` 
 ### 2. Setup Backend (Django)
 1. Buka terminal dan masuk ke folder proyek backend.
 2. Buat Virtual Environment (opsional namun disarankan):
