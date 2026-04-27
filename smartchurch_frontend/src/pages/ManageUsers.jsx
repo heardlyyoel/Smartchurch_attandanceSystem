@@ -50,19 +50,7 @@ export default function ManageUsers() {
   //  API FUNCTIONS
   // ============================================================
 
-  // Fetches all users from Django using a JWT Bearer token
-  const fetchUsers = async () => {
-    try {
-      const token = localStorage.getItem('access_token');
-      const response = await axios.get('http://127.0.0.1:8000/api/manage-users/', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUsers(response.data);
-    } catch (error) {
-      console.error("Failed to fetch users:", error);
-    }
-  };
-
+x
   // Fetch users once on component mount
   useEffect(() => {
     fetchUsers();

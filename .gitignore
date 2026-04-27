@@ -4,6 +4,7 @@ __pycache__/
 venv/
 .env
 db.sqlite3
+smartchurch_backend/smartchurch_backend/settings.py
 
 # React / Node
 node_modules/
@@ -12,5 +13,4 @@ dist/
 
 # Database Dump
 .venv
-.env
 .vscode
