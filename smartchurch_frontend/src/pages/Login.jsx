@@ -11,9 +11,7 @@ import { useState } from 'react';
 
 // ── Icons
 import { Lock, User, ArrowRight, Church, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
-
-// ── HTTP client
-import axios from 'axios';
+import { loginUser } from '../service/apiClient';
 
 export default function Login({ onLogin }) {
 
@@ -33,13 +31,13 @@ export default function Login({ onLogin }) {
     setIsLoading(true);
     setErrorMsg(''); // Clear any previous error
 
-    try {
-      // POST username & password to the Django JWT token endpoint
-      const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+try {
+      const response = await loginUser({
         username,
         password,
       });
 
+      // ... (kode bawaanmu di bawah sini untuk menyimpan token ke localStorage pasti sudah ada, biarkan saja) ...
       // Store both access and refresh tokens in localStorage
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);

@@ -8,6 +8,7 @@
 
 // ── React hooks
 import { useState, useEffect } from 'react';
+import { getAllMembers, createMember, addFaceToMember } from '../service/apiClient';
 
 // ── HTTP client
 import axios from 'axios';
@@ -31,11 +32,13 @@ export default function GuestValidation() {
   const [allMembers, setAllMembers] = useState([]);
 
   // Fetch all registered members on mount
+// Fetch all registered members on mount
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/members/');
-        setAllMembers(response.data);
+        // Cukup panggil fungsinya, nggak perlu ngetik URL dan response.data lagi!
+        const data = await getAllMembers(); 
+        setAllMembers(data);
       } catch (error) {
         console.error("Failed to fetch members:", error);
       }
@@ -86,7 +89,7 @@ export default function GuestValidation() {
   };
 
   // Saves the face — either links to existing member or creates a new one
-  const handleSaveFace = async () => {
+const handleSaveFace = async () => {
     try {
       if (activeTab === 'new') {
         // Scenario 1: create a new member record with this face
@@ -94,7 +97,10 @@ export default function GuestValidation() {
           ...formData,
           face_image_url: selectedFace.image_url,
         };
-        const response = await axios.post('http://127.0.0.1:8000/api/members/', payload);
+        
+        // --- MEMAKAI FUNGSI API CLIENT KITA ---
+        const response = await createMember(payload);
+        
         if (response.status === 201 || response.status === 200) {
           alert(`Berhasil! Jemaat baru (${formData.full_name}) telah masuk ke Database!`);
         }
@@ -102,20 +108,21 @@ export default function GuestValidation() {
         // Scenario 2: link this face to an existing member
         const memberSelect = document.querySelector('select[data-member-select]');
         const selectedMemberId = memberSelect ? memberSelect.value : null;
+        
         if (!selectedMemberId) {
           alert("Tolong pilih nama jemaat terlebih dahulu!");
           return;
         }
-        const response = await axios.post(
-          `http://127.0.0.1:8000/api/members/${selectedMemberId}/add_face/`,
-          { face_image_url: selectedFace.image_url }
-        );
+        
+        // --- MEMAKAI FUNGSI API CLIENT KITA ---
+        const response = await addFaceToMember(selectedMemberId, selectedFace.image_url);
+        
         if (response.status === 200) {
           alert(`Berhasil! Wajah telah diikat ke jemaat ID ${selectedMemberId}.`);
         }
       }
 
-      // Clean up: remove from queue, close modal, reset form
+      // Clean up: remove from queue, close modal, reset form (BAWAAN ASLI MU AMAN!)
       setPendingValidations(prev => prev.filter(item => item.id !== selectedFace.id));
       handleCloseModal();
       setFormData({ full_name: '', nickname: '', gender: 'L', birth_date: '', phone: '', email: '', address: '' });

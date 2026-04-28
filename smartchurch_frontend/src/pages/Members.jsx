@@ -6,11 +6,8 @@
 
 // ── Core React hooks
 import { useState, useEffect } from 'react';
+import { getAllMembers, createMember, updateMember, deleteMember } from '../service/apiClient';
 
-// ── HTTP client for API requests
-import axios from 'axios';
-
-// ── Icon components from Lucide
 import { Pencil, Trash2, Plus, Eye, X, Users, Search } from 'lucide-react';
 
 export default function Members() {
@@ -62,8 +59,10 @@ export default function Members() {
   // Fetches all members from the backend and updates state
   const fetchMembers = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/members/');
-      setMembers(response.data);
+      // Tinggal panggil fungsi yang sudah ada, datanya langsung keluar!
+      const data = await getAllMembers();
+      
+      setMembers(data);
       setIsLoading(false);
     } catch (error) {
       console.error("Failed to fetch members:", error);
@@ -121,15 +120,15 @@ export default function Members() {
   };
 
   // Submits the form — sends PUT for edit mode, POST for add mode
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (isEditMode) {
         // Update existing member record
-        await axios.put(`http://127.0.0.1:8000/api/members/${editingId}/`, formData);
+        await updateMember(editingId, formData);
       } else {
-        // Create a new member record
-        await axios.post('http://127.0.0.1:8000/api/members/', formData);
+        // Create a new member record (Memakai ulang fungsi createMember!)
+        await createMember(formData);
       }
       setIsModalOpen(false);
       fetchMembers(); // Refresh the table after save
@@ -139,11 +138,11 @@ export default function Members() {
     }
   };
 
-  // Asks for confirmation then sends a DELETE request for the given member ID
+// Asks for confirmation then sends a DELETE request for the given member ID
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this member?")) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/members/${id}/`);
+        await deleteMember(id); // <--- Pastikan pakai yang ini ya!
         fetchMembers(); // Refresh the table after deletion
       } catch (error) {
         console.error("Failed to delete member:", error);

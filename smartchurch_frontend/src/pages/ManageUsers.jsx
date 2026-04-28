@@ -7,9 +7,7 @@
 
 // ── React hooks
 import { useState, useEffect } from 'react';
-
-// ── HTTP client
-import axios from 'axios';
+import { createUser, updateUser, deleteUser } from '../service/apiClient';
 
 // ── Icon set from Lucide
 import {
@@ -109,13 +107,10 @@ x
   // ============================================================
 
   // Sends POST (create) or PUT (update) depending on mode
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-
       // If editing and password is blank, omit it from the payload
       const dataToSend = { ...formData };
       if (editingId && !dataToSend.password) {
@@ -123,11 +118,11 @@ x
       }
 
       if (editingId) {
-        // Update existing user record
-        await axios.put(`http://127.0.0.1:8000/api/manage-users/${editingId}/`, dataToSend, config);
+        // Update existing user record (Tanpa perlu nulis URL dan Token manual!)
+        await updateUser(editingId, dataToSend);
       } else {
-        // Create a new user record
-        await axios.post('http://127.0.0.1:8000/api/manage-users/', dataToSend, config);
+        // Create a new user record (Tanpa perlu nulis URL dan Token manual!)
+        await createUser(dataToSend);
       }
 
       closeModal();
@@ -145,20 +140,20 @@ x
   // ============================================================
 
   // Asks for confirmation then sends a DELETE request for the given user ID
-  const handleDelete = async (id) => {
+const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to permanently delete this account?")) {
       try {
-        const token = localStorage.getItem('access_token');
-        await axios.delete(`http://127.0.0.1:8000/api/manage-users/${id}/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Tinggal panggil fungsinya, bye-bye token manual! 👋
+        await deleteUser(id);
+        
         fetchUsers(); // Refresh the table after deletion
       } catch (error) {
         alert("Failed to delete user.");
+        console.error(error);
       }
     }
   };
-
+  
   // ============================================================
   //  DERIVED STATS
   // ============================================================

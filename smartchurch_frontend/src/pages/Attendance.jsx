@@ -7,6 +7,7 @@
 
 // ── React hooks
 import { useState } from 'react';
+import { getVideoFeedUrl, getAllMembers } from '../service/apiClient';
 
 // ── Icons
 import {
@@ -234,21 +235,21 @@ export default function Attendance() {
                 <>
                   {/* Active state: scan-line overlay + waiting message */}
                   <div className="scan-line" />
-                  <div className="flex flex-col items-center gap-3 text-emerald-400 z-10 relative">
-                    <div
-                      className="w-16 h-16 rounded-2xl flex items-center justify-center"
-                      style={{ background:'rgba(16,185,129,0.12)', border:'1px solid rgba(16,185,129,0.3)' }}
-                    >
-                      <Camera size={28} className="text-emerald-400" style={{ animation:'recPulse 1.5s ease-in-out infinite' }} />
-                    </div>
-                    <p className="font-mono text-xs tracking-widest text-emerald-400/70">
+                  <div className="relative aspect-video bg-black/40 rounded-xl overflow-hidden border border-emerald-500/20 group">
+              
+                  <img 
+                    src={getVideoFeedUrl()} 
+                    className="absolute inset-0 w-full h-full object-cover" 
+                    alt="Live CCTV Attendance" 
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                  
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 pointer-events-none">
+                    <p className="font-mono text-xs tracking-widest text-emerald-400/70 animate-pulse">
                       AWAITING DJANGO MJPEG STREAM...
                     </p>
-                    {/*
-                      Uncomment when Django streaming endpoint is ready:
-                      <img src="http://127.0.0.1:8000/api/video_feed/" className="absolute inset-0 w-full h-full object-cover" alt="Live CCTV" />
-                    */}
                   </div>
+                </div>
 
                   {/* REC badge */}
                   <div className="rec-badge absolute top-4 right-4 flex items-center gap-1.5 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-lg font-mono">
