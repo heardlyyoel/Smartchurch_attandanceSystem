@@ -7,8 +7,7 @@
 
 // ── React hooks
 import { useState, useEffect } from 'react';
-import { createUser, updateUser, deleteUser } from '../service/apiClient';
-
+import { getAllUsers, createUser, updateUser, deleteUser } from '../service/apiClient';
 // ── Icon set from Lucide
 import {
   UserPlus, Edit, Trash2, Shield, UserX,
@@ -48,7 +47,18 @@ export default function ManageUsers() {
   //  API FUNCTIONS
   // ============================================================
 
-x
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getAllUsers(); 
+      setUsers(data); 
+    } catch (error) {
+      console.error("Gagal mengambil data user:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Fetch users once on component mount
   useEffect(() => {
     fetchUsers();

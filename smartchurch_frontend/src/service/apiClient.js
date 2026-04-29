@@ -32,6 +32,10 @@ export const addFaceToMember = async (memberId, faceImageUrl) => {
 };
 
 // --- Users API ---
+export const getAllUsers = async () => {
+  const response = await apiClient.get('/manage-users/');
+  return response.data;
+};
 export const createUser = async (payload) => await apiClient.post('/manage-users/', payload);
 export const updateUser = async (id, payload) => await apiClient.put(`/manage-users/${id}/`, payload);
 export const deleteUser = async (id) => await apiClient.delete(`/manage-users/${id}/`);
